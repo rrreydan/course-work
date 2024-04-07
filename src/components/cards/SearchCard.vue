@@ -13,6 +13,7 @@ const arrivalPoints = ref([
   { id: 3, title: 'Ярцево', value: 'Yartsevo' },
   { id: 4, title: 'Ярцево', value: 'Yartsevo' }
 ])
+const departureDate = ref(null)
 </script>
 
 <template>
@@ -23,31 +24,39 @@ const arrivalPoints = ref([
     elevation="16"
   >
     <v-card-text class="card-content">
-      <div class="inputs">
-        <v-select
-          :items="departurePoints"
-          item-title="title"
-          item-value="value"
-          label="Пункт отправления"
-          variant="outlined"
-        />
-        <v-select
-          :items="arrivalPoints"
-          item-title="title"
-          item-value="value"
-          label="Пункт прибытия"
-          variant="outlined"
-        />
-        <VueDatePicker
-          class="date-picker"
-          auto-apply
-          locale="ru"
-          format="dd.MM.yyyy"
-          placeholder="Дата выезда"
-          :enable-time-picker="false"
-          :month-change-on-scroll="false"
-        />
-      </div>
+      <v-row>
+        <v-col>
+          <v-select
+            :items="departurePoints"
+            item-title="title"
+            item-value="value"
+            label="Пункт отправления"
+            variant="outlined"
+            hide-details
+          />
+        </v-col>
+        <v-col>
+          <v-select
+            :items="arrivalPoints"
+            item-title="title"
+            item-value="value"
+            label="Пункт прибытия"
+            variant="outlined"
+            hide-details
+          />
+        </v-col>
+        <v-col>
+          <VueDatePicker
+            v-model="departureDate"
+            auto-apply
+            locale="ru"
+            format="dd.MM.yyyy"
+            placeholder="Дата выезда"
+            :enable-time-picker="false"
+            :month-change-on-scroll="false"
+          />
+        </v-col>
+      </v-row>
       <v-btn
         class="search-button text-none"
         size="large"
@@ -68,20 +77,12 @@ const arrivalPoints = ref([
 }
 
 .card-content {
-  margin-top: 2rem;
-}
-
-.inputs {
-  display: flex;
-  gap: 1rem;
-}
-
-.date-picker {
-  width: auto;
+  margin-top: 1.5rem;
 }
 
 .search-button {
   float: right;
+  margin-top: 1rem;
   margin-bottom: 1rem;
   width: 10rem;
 }
