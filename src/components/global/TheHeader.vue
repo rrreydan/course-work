@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import TheTopNavbar from './TheTopNavbar.vue'
-import SearchCard from '../cards/SearchCard.vue'
+import TheTopNavbar from '@/components/global/TheTopNavbar.vue'
+import SearchCard from '@/components/cards/SearchCard.vue'
 </script>
 
 <template>
-  <header>
+  <v-header>
     <TheTopNavbar />
     <div class="search-section">
       <v-container class="container">
         <SearchCard />
       </v-container>
     </div>
-  </header>
+  </v-header>
 </template>
 
 <style lang="scss" scoped>

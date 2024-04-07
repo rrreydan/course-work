@@ -36,7 +36,16 @@ const changeToggle = (id: number): void => {
 <template>
   <div class="wrapper">
     <v-container class="container">
-      <div class="logo">Logo</div>
+      <router-link
+        to="/"
+        class="logo"
+      >
+        <v-icon
+          icon="mdi-compass-outline"
+          size="large"
+        />
+        <p>Andrey Bus</p>
+      </router-link>
       <ul class="text-buttons">
         <li
           v-for="button in textButtons"
@@ -72,6 +81,14 @@ const changeToggle = (id: number): void => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .text-buttons {
