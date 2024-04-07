@@ -19,7 +19,7 @@ const textButtons = ref([
     text: 'Контакты',
     href: '#',
     isToggle: false
-  },
+  }
 ])
 
 const changeToggle = (id: number): void => {
@@ -30,25 +30,31 @@ const changeToggle = (id: number): void => {
       button.isToggle = false
     }
   }
-} 
+}
 </script>
 
 <template>
   <div class="wrapper">
     <v-container class="container">
-      <div class="logo">
-        Logo
-      </div>
+      <div class="logo">Logo</div>
       <ul class="text-buttons">
-        <li v-for="button in textButtons" :key="button.id" class="hover-underline-animation"
-          :class="{ 'toggle': button.isToggle }" @click="changeToggle(button.id)">
+        <li
+          v-for="button in textButtons"
+          :key="button.id"
+          class="hover-underline-animation"
+          :class="{ toggle: button.isToggle }"
+          @click="changeToggle(button.id)"
+        >
           <router-link :to="button.href">
             {{ button.text }}
           </router-link>
         </li>
       </ul>
       <div class="other-buttons">
-        <v-icon icon="mdi-account-circle-outline" size="large" />
+        <v-icon
+          icon="mdi-account-circle-outline"
+          size="large"
+        />
       </div>
     </v-container>
   </div>
@@ -57,7 +63,7 @@ const changeToggle = (id: number): void => {
 <style lang="scss" scoped>
 .wrapper {
   color: #fff;
-  background: #1A5EC6;
+  background: #1a5ec6;
   font-weight: 500;
   font-size: 1.2rem;
 }

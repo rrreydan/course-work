@@ -16,7 +16,7 @@ const arrivalPoints = ref([
 </script>
 
 <template>
-  <v-card 
+  <v-card
     class="search-card"
     title="Найти билет на автобус"
     width="1200"
@@ -38,7 +38,7 @@ const arrivalPoints = ref([
           label="Пункт прибытия"
           variant="outlined"
         />
-        <VueDatePicker 
+        <VueDatePicker
           class="date-picker"
           auto-apply
           locale="ru"
@@ -48,7 +48,7 @@ const arrivalPoints = ref([
           :month-change-on-scroll="false"
         />
       </div>
-      <v-btn 
+      <v-btn
         class="search-button text-none"
         size="large"
         rounded="lg"
@@ -58,7 +58,7 @@ const arrivalPoints = ref([
       >
         Найти
       </v-btn>
-    </v-card-text> 
+    </v-card-text>
   </v-card>
 </template>
 

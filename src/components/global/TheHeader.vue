@@ -10,14 +10,15 @@ import SearchCard from '../cards/SearchCard.vue'
       <v-container class="container">
         <SearchCard />
       </v-container>
-    </div> 
+    </div>
   </header>
 </template>
 
 <style lang="scss" scoped>
 .search-section {
   height: 30rem;
-  background: url('../../assets/images/—Pngtree—street road bus advertising background_968613.jpg') center;
+  background: url('../../assets/images/—Pngtree—street road bus advertising background_968613.jpg')
+    center;
   background-size: contain;
 }
 
@@ -26,5 +27,5 @@ import SearchCard from '../cards/SearchCard.vue'
   display: flex;
   justify-content: center;
   align-items: center;
-} 
+}
 </style>
