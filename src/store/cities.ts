@@ -2,6 +2,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 
 const API_URL = import.meta.env.VITE_RESTDATABASE_URL
+const API_KEY = import.meta.env.VITE_RESTDATABASE_API_KEY
 
 export const useCitiesStore = defineStore('cities', {
   state: () => ({ cities: [] }),
@@ -10,7 +11,7 @@ export const useCitiesStore = defineStore('cities', {
       const response = await axios
         .get(API_URL + 'cities', {
           headers: {
-            'x-apikey': import.meta.env.VITE_RESTDATABASE_API_KEY
+            'x-apikey': API_KEY
           }
         })
         .then((res) => res.data)
