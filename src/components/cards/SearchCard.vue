@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useCitiesStore } from '@/store/cities'
+import { useBusServicesStore } from '@/store/busServices'
+import type { ICity } from '@/interfaces/cityInterface'
 
-interface City {
-  title: string
-  country: string
-  region: string
-}
-
-const store = useCitiesStore()
+const citiesStore = useCitiesStore()
+const busServicesStore = useBusServicesStore()
 
 const departurePoints = ref([])
 const arrivalPoints = ref([])
@@ -17,7 +14,7 @@ const selectedDeparturePoint = ref(null)
 const selectedArrivalPoint = ref(null)
 const departureDate = ref(null)
 
-const itemProps = (item: City) => {
+const itemProps = (item: ICity) => {
   return {
     title: item.title,
     subtitle: item.country + ', ' + item.region
@@ -25,10 +22,18 @@ const itemProps = (item: City) => {
 }
 
 onMounted(async () => {
-  await store.getCities()
-  departurePoints.value = store.cities
-  arrivalPoints.value = store.cities
+  await citiesStore.getCities()
+  departurePoints.value = citiesStore.cities
+  arrivalPoints.value = citiesStore.cities
 })
+
+const searchBusServices = async () => {
+  await busServicesStore.getBusServices(
+    selectedDeparturePoint.value,
+    selectedArrivalPoint.value,
+    departureDate.value
+  )
+}
 </script>
 
 <template>
@@ -69,6 +74,7 @@ onMounted(async () => {
             auto-apply
             locale="ru"
             format="dd.MM.yyyy"
+            model-type="yyyy-MM-dd"
             placeholder="Дата выезда"
             :enable-time-picker="false"
             :month-change-on-scroll="false"
@@ -82,6 +88,7 @@ onMounted(async () => {
         variant="flat"
         color="#1A5EC6"
         prepend-icon="mdi-magnify"
+        @click="searchBusServices"
       >
         Найти
       </v-btn>
