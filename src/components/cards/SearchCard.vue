@@ -1,19 +1,34 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useCitiesStore } from '@/store/cities'
 
-const departurePoints = ref([
-  { id: 1, title: 'Смоленск', value: 'Smolensk' },
-  { id: 2, title: 'Смоленск', value: 'Smolensk' },
-  { id: 3, title: 'Смоленск', value: 'Smolensk' },
-  { id: 4, title: 'Смоленск', value: 'Smolensk' }
-])
-const arrivalPoints = ref([
-  { id: 1, title: 'Ярцево', value: 'Yartsevo' },
-  { id: 2, title: 'Ярцево', value: 'Yartsevo' },
-  { id: 3, title: 'Ярцево', value: 'Yartsevo' },
-  { id: 4, title: 'Ярцево', value: 'Yartsevo' }
-])
+interface City {
+  title: string
+  country: string
+  region: string
+}
+
+const store = useCitiesStore()
+
+const departurePoints = ref([])
+const arrivalPoints = ref([])
+
+const selectedDeparturePoint = ref(null)
+const selectedArrivalPoint = ref(null)
 const departureDate = ref(null)
+
+const itemProps = (item: City) => {
+  return {
+    title: item.title,
+    subtitle: item.country + ', ' + item.region
+  }
+}
+
+onMounted(async () => {
+  await store.getCities()
+  departurePoints.value = store.cities
+  arrivalPoints.value = store.cities
+})
 </script>
 
 <template>
@@ -27,9 +42,10 @@ const departureDate = ref(null)
       <v-row>
         <v-col>
           <v-select
+            v-model="selectedDeparturePoint"
             :items="departurePoints"
+            :item-props="itemProps"
             item-title="title"
-            item-value="value"
             label="Пункт отправления"
             variant="outlined"
             hide-details
@@ -37,7 +53,9 @@ const departureDate = ref(null)
         </v-col>
         <v-col>
           <v-select
+            v-model="selectedArrivalPoint"
             :items="arrivalPoints"
+            :item-props="itemProps"
             item-title="title"
             item-value="value"
             label="Пункт прибытия"
