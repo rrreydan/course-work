@@ -2,6 +2,7 @@
 import { useBusServicesStore } from '@/store/busServices'
 import type { IBusService } from '@/interfaces/busServiceInterface'
 import BusServiceCard from '@/components/cards/BusServiceCard.vue'
+import BusServiceCardsHeader from '@/components/ui/BusServiceCardsHeader.vue'
 import { ref } from 'vue'
 
 const busServicesStore = useBusServicesStore()
@@ -22,7 +23,11 @@ busServicesStore.$subscribe((_, state) => {
       >
         Здесь пока ничего нет. Воспользуйтесь поиском
       </div>
-      <div v-else>
+      <div
+        class="bus-service-cards"
+        v-else
+      >
+        <BusServiceCardsHeader :bus-services="busServices" />
         <BusServiceCard
           v-for="busService in busServices"
           :key="busService._id"
@@ -45,5 +50,13 @@ busServicesStore.$subscribe((_, state) => {
 .empty-search {
   font-size: 2rem;
   font-weight: 700;
+}
+
+.bus-service-cards {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 </style>

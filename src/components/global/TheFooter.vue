@@ -2,7 +2,6 @@
 
 <template>
   <v-footer
-    height="10"
     color="#1a5ec6"
   >
     <v-container class="container">
