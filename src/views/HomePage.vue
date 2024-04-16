@@ -3,14 +3,39 @@ import { useBusServicesStore } from '@/store/busServices'
 import type { IBusService } from '@/interfaces/busServiceInterface'
 import BusServiceCard from '@/components/cards/BusServiceCard.vue'
 import BusServiceCardsHeader from '@/components/ui/BusServiceCardsHeader.vue'
-import { ref } from 'vue'
+import { watch, ref } from 'vue'
 
 const busServicesStore = useBusServicesStore()
 
 const busServices = ref([] as IBusService[])
+const sortedBusServices = ref([] as IBusService[])
+const sortingDown = ref(true)
 
 busServicesStore.$subscribe((_, state) => {
   busServices.value = state.busServices
+  sortedBusServices.value = state.busServices
+})
+
+const sortBusServices = (): void => {
+  sortedBusServices.value = busServices.value
+  if (sortingDown.value) {
+    sortedBusServices.value.sort(
+      (a, b) =>
+        new Date(b.departure_time).getTime() -
+        new Date(a.departure_time).getTime()
+    )
+  } else {
+    sortedBusServices.value.sort(
+      (a, b) =>
+        new Date(a.departure_time).getTime() -
+        new Date(b.departure_time).getTime()
+    )
+  }
+  sortingDown.value = !sortingDown.value
+}
+
+watch(busServices, () => {
+  sortingDown.value = true
 })
 </script>
 
@@ -28,8 +53,25 @@ busServicesStore.$subscribe((_, state) => {
         v-else
       >
         <BusServiceCardsHeader :bus-services="busServices" />
+        <div class="sorting">
+          Сортировать:
+          <span
+            class="sorting-by-time"
+            @click="sortBusServices"
+          >
+            по времени
+            <v-icon
+              v-if="sortingDown"
+              icon="mdi-arrow-down-thin"
+            />
+            <v-icon
+              v-else
+              icon="mdi-arrow-up-thin"
+            />
+          </span>
+        </div>
         <BusServiceCard
-          v-for="busService in busServices"
+          v-for="busService in sortedBusServices"
           :key="busService._id"
           :bus-service="busService"
         />
@@ -58,5 +100,22 @@ busServicesStore.$subscribe((_, state) => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.sorting {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sorting-by-time {
+  display: flex;
+  align-items: center;
+  color: #1a5ec6;
+  cursor: pointer;
+
+  &:hover {
+    color: #2e72da;
+  }
 }
 </style>

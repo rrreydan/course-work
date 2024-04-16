@@ -76,6 +76,7 @@ const searchBusServices = async () => {
             format="dd.MM.yyyy"
             model-type="yyyy-MM-dd"
             placeholder="Дата выезда"
+            :min-date="new Date()"
             :enable-time-picker="false"
             :month-change-on-scroll="false"
           />

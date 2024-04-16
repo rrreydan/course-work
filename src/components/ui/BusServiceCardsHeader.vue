@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { formatDateTime, getWeekDay } from '@/utils/dates'
-import type { PropType } from 'vue'
+import { type PropType } from 'vue'
 import type { IBusService } from '@/interfaces/busServiceInterface'
 
 const props = defineProps({
@@ -18,7 +18,9 @@ const props = defineProps({
       {{ props.busServices[0].arrival_point[0].title }}
     </div>
     <div class="date">
-      {{ formatDateTime(props.busServices[0].departure_date, 'date', 'numeric') }}
+      {{
+        formatDateTime(props.busServices[0].departure_date, 'date', 'numeric')
+      }}
       {{ getWeekDay(props.busServices[0].departure_date) }}
     </div>
   </div>
