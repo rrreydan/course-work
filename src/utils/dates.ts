@@ -25,14 +25,14 @@ export const formatDateTime = (
 
 export const getWeekDay = (date: string): string => {
   const weekDays = [
+    'воскресенье',
     'понедельник',
     'вторник',
     'среда',
     'четверг',
     'пятница',
-    'суббота',
-    'воскресенье'
+    'суббота'
   ]
-  const day = new Date(date).getDay() - 1
+  const day = new Date(date).getDay()
   return weekDays.filter((_, index) => index === day)[0]
 }
