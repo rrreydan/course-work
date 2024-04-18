@@ -2,6 +2,7 @@
 import { useUsersStore } from '@/store/users'
 import { ref } from 'vue'
 import type { IUser } from '@/interfaces/userInterface'
+import RegisterModal from '@/components/modals/RegisterModal.vue'
 
 const usersStore = useUsersStore()
 
@@ -65,10 +66,7 @@ const loginHandler = async () => {
           >
             Войти
           </v-btn>
-          <div class="register-suggestion">
-            Нет аккаунта?
-            <span>Зарегистрироваться</span>
-          </div>
+          <RegisterModal />
         </v-card-text>
       </v-card>
     </template>
@@ -79,19 +77,5 @@ const loginHandler = async () => {
 .login-button {
   margin-top: 0.5rem;
   width: 100%;
-}
-
-.register-suggestion {
-  margin-top: 0.5rem;
-  text-align: center;
-
-  span {
-    color: #1a5ec6;
-    cursor: pointer;
-
-    &:hover {
-      color: #2e72da;
-    }
-  }
 }
 </style>
