@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import LoginModal from '@/components/modals/LoginModal.vue'
+import { useUsersStore } from '@/store/users'
+
+const usersStore = useUsersStore()
 
 const textButtons = ref([
   {
@@ -31,6 +35,10 @@ const changeToggle = (id: number): void => {
     }
   }
 }
+
+const logoutHandler = () => {
+  usersStore.logoutUser()
+}
 </script>
 
 <template>
@@ -60,10 +68,24 @@ const changeToggle = (id: number): void => {
         </li>
       </ul>
       <div class="other-buttons">
-        <v-icon
-          icon="mdi-account-circle-outline"
-          size="large"
-        />
+        <LoginModal v-if="!usersStore.user.status.loggedIn" />
+        <div
+          class="logged-in-menu"
+          v-else
+        >
+          <router-link
+            class="hover-underline-animation"
+            to="#"
+          >
+            Личный кабинет
+          </router-link>
+          <div
+            class="hover-underline-animation"
+            @click="logoutHandler"
+          >
+            Выйти
+          </div>
+        </div>
       </div>
     </v-container>
   </div>
@@ -134,5 +156,11 @@ const changeToggle = (id: number): void => {
 .hover-underline-animation:hover:after {
   transform: scaleX(1);
   transform-origin: bottom left;
+}
+
+.logged-in-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 </style>
