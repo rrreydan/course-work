@@ -1,22 +1,12 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
-
-const API_URL = import.meta.env.VITE_RESTDATABASE_URL
-const API_KEY = import.meta.env.VITE_RESTDATABASE_API_KEY
+import CitiesService from '@/services/cities.service'
+import type { ICity } from '@/interfaces/cityInterface'
 
 export const useCitiesStore = defineStore('cities', {
-  state: () => ({ cities: [] }),
+  state: () => ({ cities: [] as ICity[] }),
   actions: {
     async getCities() {
-      const response = await axios
-        .get(API_URL + 'cities', {
-          headers: {
-            'x-apikey': API_KEY
-          }
-        })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-
+      const response = await CitiesService.getCities()
       this.cities = response
     }
   }

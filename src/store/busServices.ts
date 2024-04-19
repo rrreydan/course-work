@@ -1,11 +1,9 @@
-import axios from 'axios'
 import { defineStore } from 'pinia'
-
-const API_URL = import.meta.env.VITE_RESTDATABASE_URL
-const API_KEY = import.meta.env.VITE_RESTDATABASE_API_KEY
+import BusServicesService from '@/services/busServices.service'
+import type { IBusService } from '@/interfaces/busServiceInterface'
 
 export const useBusServicesStore = defineStore('busServices', {
-  state: () => ({ busServices: [] }),
+  state: () => ({ busServices: [] as IBusService[] }),
   actions: {
     async getBusServices(
       departurePoint: string | null,
@@ -23,18 +21,7 @@ export const useBusServicesStore = defineStore('busServices', {
           $date: date
         }
       }
-      const response = await axios
-        .get(API_URL + 'busservices', {
-          params: {
-            q: JSON.stringify(q)
-          },
-          headers: {
-            'x-apikey': API_KEY
-          }
-        })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-
+      const response = await BusServicesService.getBusServices(q)
       this.busServices = response
     }
   }

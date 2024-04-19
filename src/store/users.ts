@@ -1,9 +1,6 @@
 import type { IUser } from '@/interfaces/userInterface'
-import axios from 'axios'
 import { defineStore } from 'pinia'
-
-const API_URL = import.meta.env.VITE_RESTDATABASE_URL
-const API_KEY = import.meta.env.VITE_RESTDATABASE_API_KEY
+import UsersService from '@/services/users.service'
 
 const localStorageUser = localStorage.getItem('user')
   ? JSON.parse(localStorage.getItem('user') as string)
@@ -11,55 +8,24 @@ const localStorageUser = localStorage.getItem('user')
 
 export const useUsersStore = defineStore('users', {
   state: () => ({
-    users: [],
+    users: [] as IUser[],
     user: localStorageUser
       ? { status: { loggedIn: true }, data: localStorageUser }
       : { status: { loggedIn: false }, data: null }
   }),
   actions: {
     async getUsers() {
-      const response = await axios
-        .get(API_URL + 'websiteusers', {
-          headers: {
-            'x-apikey': API_KEY
-          }
-        })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-
+      const response = await UsersService.getUsers()
       this.users = response
     },
 
     async getUserById(id: string) {
-      const response = await axios
-        .get(API_URL + 'websiteusers/' + id, {
-          headers: {
-            'x-apikey': API_KEY
-          }
-        })
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-
+      const response = await UsersService.getUserById(id)
       return response
     },
 
     async registerUser(email: string, password: string) {
-      const response = await axios
-        .post(
-          API_URL + 'websiteusers',
-          {
-            email,
-            password
-          },
-          {
-            headers: {
-              'x-apikey': API_KEY
-            }
-          }
-        )
-        .then((res) => res.data)
-        .catch((err) => console.log(err))
-
+      const response = await UsersService.addUser(email, password)
       const user = await this.getUserById(response._id)
       this.loginUser(user)
     },
