@@ -1,13 +1,42 @@
 <script setup lang="ts">
 import type { IBusService } from '@/interfaces/busServiceInterface'
-import type { PropType } from 'vue'
+import { onMounted, ref, type PropType } from 'vue'
 import { formatDateTime } from '@/utils/dates'
+import { useUsersStore } from '@/store/users'
+import LoginModal from '../modals/LoginModal.vue'
+import UsersService from '@/services/users.service'
+
+const usersStore = useUsersStore()
 
 const props = defineProps({
   busService: {
     type: Object as PropType<IBusService>,
     required: true
+  },
+  isFavorite: {
+    type: Boolean,
+    required: true
   }
+})
+
+const isFavoriteRef = ref(props.isFavorite)
+
+const addToFavorites = async () => {
+  await UsersService.addFavoriteBusService(props.busService)
+  const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
+  usersStore.loginUser(updatedUser)
+  isFavoriteRef.value = true
+}
+
+const removeFromFavorites = async () => {
+  await UsersService.removeFavoriteBusService(props.busService)
+  const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
+  usersStore.loginUser(updatedUser)
+  isFavoriteRef.value = false
+}
+
+onMounted(() => {
+  console.log(props.isFavorite)
 })
 </script>
 
@@ -50,15 +79,32 @@ const props = defineProps({
             cols="4"
             class="last-column"
           >
+            <LoginModal
+              v-if="!usersStore.user.status.loggedIn"
+              :is-favorite-button="true"
+            />
             <v-btn
-              class="search-button text-none"
+              v-else-if="!isFavoriteRef"
+              class="text-none"
               size="large"
               rounded="lg"
               variant="flat"
               color="#1A5EC6"
               prepend-icon="mdi-star"
+              @click="addToFavorites"
             >
               Добавить в избранное
+            </v-btn>
+            <v-btn
+              v-else-if="isFavoriteRef"
+              class="text-none"
+              size="large"
+              rounded="lg"
+              variant="outlined"
+              prepend-icon="mdi-star"
+              @click="removeFromFavorites"
+            >
+              В избранном
             </v-btn>
             <div class="favorite-count">В избранном у 0 человек</div>
           </v-col>

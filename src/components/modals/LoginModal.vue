@@ -4,6 +4,14 @@ import { ref } from 'vue'
 import type { IUser } from '@/interfaces/userInterface'
 import RegisterModal from '@/components/modals/RegisterModal.vue'
 
+const props = defineProps({
+  isFavoriteButton: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+})
+
 const usersStore = useUsersStore()
 
 const email = ref('')
@@ -30,15 +38,30 @@ const loginHandler = async () => {
 <template>
   <v-dialog
     v-model="dialog"
+    activator="#favorite-open-auth-modal"
     max-width="500"
   >
     <template v-slot:activator="{ props: activatorProps }">
       <v-icon
+        v-if="!props.isFavoriteButton"
         v-bind="activatorProps"
         icon="mdi-account-circle-outline"
         size="large"
         @click="dialog = true"
       />
+      <v-btn
+        v-else
+        v-bind="activatorProps"
+        class="text-none"
+        size="large"
+        rounded="lg"
+        variant="flat"
+        color="#1A5EC6"
+        prepend-icon="mdi-star"
+        @click="dialog = true"
+      >
+        Добавить в избранное
+      </v-btn>
     </template>
 
     <template v-slot:default>

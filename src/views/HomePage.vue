@@ -1,19 +1,27 @@
 <script lang="ts" setup>
 import { useBusServicesStore } from '@/store/busServices'
+import { useUsersStore } from '@/store/users'
 import type { IBusService } from '@/interfaces/busServiceInterface'
 import BusServiceCard from '@/components/cards/BusServiceCard.vue'
 import BusServiceCardsHeader from '@/components/ui/BusServiceCardsHeader.vue'
-import { watch, ref } from 'vue'
+import { watch, ref, onMounted } from 'vue'
+import type { IUser } from '@/interfaces/userInterface'
 
 const busServicesStore = useBusServicesStore()
+const usersStore = useUsersStore()
 
 const busServices = ref([] as IBusService[])
 const sortedBusServices = ref([] as IBusService[])
+const user = ref({} as { status: { loggedIn: boolean }; data: IUser })
 const sortingDown = ref(true)
 
 busServicesStore.$subscribe((_, state) => {
   busServices.value = state.busServices
   sortedBusServices.value = state.busServices
+})
+
+usersStore.$subscribe((_, state) => {
+  user.value = state.user
 })
 
 const sortBusServices = (): void => {
@@ -36,6 +44,10 @@ const sortBusServices = (): void => {
 
 watch(busServices, () => {
   sortingDown.value = true
+})
+
+onMounted(() => {
+  user.value = usersStore.user
 })
 </script>
 
@@ -74,6 +86,12 @@ watch(busServices, () => {
           v-for="busService in sortedBusServices"
           :key="busService._id"
           :bus-service="busService"
+          :is-favorite="
+            user.status.loggedIn &&
+            user.data.favorite_bus_services.find(
+              (_busService: IBusService) => _busService._id === busService._id
+            ) !== undefined
+          "
         />
       </div>
     </v-container>
