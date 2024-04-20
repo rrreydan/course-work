@@ -6,6 +6,7 @@ const usersStore = useUsersStore()
 
 const logoutHandler = () => {
   usersStore.logoutUser()
+  window.location.reload()
 }
 </script>
 

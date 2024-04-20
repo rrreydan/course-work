@@ -24,7 +24,8 @@ class UsersService {
     return await instance
       .post('websiteusers', {
         email,
-        password
+        password,
+        favorite_bus_services: []
       })
       .then((res) => res.data)
       .catch((err) => console.log(err))

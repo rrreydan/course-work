@@ -20,12 +20,14 @@ const props = defineProps({
 })
 
 const isFavoriteRef = ref(props.isFavorite)
+const favoriteCount = ref(0)
 
 const addToFavorites = async () => {
   await UsersService.addFavoriteBusService(props.busService)
   const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = true
+  favoriteCount.value++
 }
 
 const removeFromFavorites = async () => {
@@ -33,10 +35,19 @@ const removeFromFavorites = async () => {
   const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = false
+  favoriteCount.value--
 }
 
-onMounted(() => {
-  console.log(props.isFavorite)
+onMounted(async () => {
+  await usersStore.getUsers()
+
+  for (const user of usersStore.users) {
+    for (const busService of user.favorite_bus_services) {
+      if (busService._id === props.busService._id) {
+        favoriteCount.value++
+      }
+    }
+  }
 })
 </script>
 
@@ -106,7 +117,7 @@ onMounted(() => {
             >
               В избранном
             </v-btn>
-            <div class="favorite-count">В избранном у 0 человек</div>
+            <div class="favorite-count">В избранном у {{ favoriteCount }} человек</div>
           </v-col>
         </v-row>
       </v-card-text>
