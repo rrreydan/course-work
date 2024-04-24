@@ -31,7 +31,7 @@ const logoutHandler = () => {
         >
           <router-link
             class="hover-underline-animation"
-            to="#"
+            :to="`/personal-cabinet/${usersStore.user.data._id}`"
           >
             Личный кабинет
           </router-link>

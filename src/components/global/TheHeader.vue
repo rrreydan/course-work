@@ -1,12 +1,24 @@
 <script setup lang="ts">
 import TheTopNavbar from '@/components/global/TheTopNavbar.vue'
 import SearchCard from '@/components/cards/SearchCard.vue'
+import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+
+const router = useRouter()
+const currentRoute = ref('' as string | undefined)
+
+watch(router.currentRoute, () => {
+  currentRoute.value = router.currentRoute.value.name?.toString()
+})
 </script>
 
 <template>
   <v-header>
     <TheTopNavbar />
-    <div class="search-section">
+    <div
+      v-if="currentRoute === 'home'"
+      class="search-section"
+    >
       <v-container class="container">
         <SearchCard />
       </v-container>

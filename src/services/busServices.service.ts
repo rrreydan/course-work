@@ -11,10 +11,19 @@ const instance = getInstance()
 
 class BusServicesService {
   async getBusServices(q: IQuery): Promise<IBusService[]> {
+    let isEmptyQuery = false
+
+    if (
+      q.departure_point.title === null &&
+      q.arrival_point.title === null &&
+      q.departure_date.$date === null
+    )
+      isEmptyQuery = true
+
     return await instance
       .get('busservices', {
         params: {
-          q: JSON.stringify(q)
+          q: isEmptyQuery ? {} : JSON.stringify(q)
         }
       })
       .then((res) => res.data)
