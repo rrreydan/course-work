@@ -7,8 +7,8 @@ import type { ICity } from '@/interfaces/cityInterface'
 const citiesStore = useCitiesStore()
 const busServicesStore = useBusServicesStore()
 
-const departurePoints = ref([])
-const arrivalPoints = ref([])
+const departurePoints = ref([] as ICity[])
+const arrivalPoints = ref([] as ICity[])
 
 const selectedDeparturePoint = ref(null)
 const selectedArrivalPoint = ref(null)
@@ -16,8 +16,8 @@ const departureDate = ref(null)
 
 const itemProps = (item: ICity) => {
   return {
-    title: item.title,
-    subtitle: item.country + ', ' + item.region
+    title: item.value.title,
+    subtitle: item.value.country + ', ' + item.value.region
   }
 }
 

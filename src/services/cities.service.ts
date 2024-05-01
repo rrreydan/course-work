@@ -6,8 +6,8 @@ const instance = getInstance()
 class CitiesService {
   async getCities(): Promise<ICity[]> {
     return await instance
-      .get('cities', {})
-      .then((res) => res.data)
+      .get('cities/_design/get_cities/_view/all-cities', {})
+      .then((res) => res.data.rows)
       .catch((err) => console.log(err))
   }
 }

@@ -1,6 +1,11 @@
 export interface ICity {
-  _id: string
+  id: string
+  key: string
+  value: ICityValue
+}
+
+export interface ICityValue {
   title: string
-  country: string
   region: string
+  country: string
 }
