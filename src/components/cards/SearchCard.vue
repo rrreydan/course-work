@@ -28,6 +28,9 @@ onMounted(async () => {
 })
 
 const searchBusServices = async () => {
+  console.log(selectedDeparturePoint.value,
+    selectedArrivalPoint.value,
+    departureDate.value)
   await busServicesStore.getBusServices(
     selectedDeparturePoint.value,
     selectedArrivalPoint.value,

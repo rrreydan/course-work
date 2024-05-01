@@ -29,14 +29,14 @@ const sortBusServices = (): void => {
   if (sortingDown.value) {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(b.departure_time).getTime() -
-        new Date(a.departure_time).getTime()
+        new Date(b.value.departure_time).getTime() -
+        new Date(a.value.departure_time).getTime()
     )
   } else {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(a.departure_time).getTime() -
-        new Date(b.departure_time).getTime()
+        new Date(a.value.departure_time).getTime() -
+        new Date(b.value.departure_time).getTime()
     )
   }
   sortingDown.value = !sortingDown.value
@@ -84,12 +84,12 @@ onMounted(() => {
         </div>
         <BusServiceCard
           v-for="busService in sortedBusServices"
-          :key="busService._id"
+          :key="busService.id"
           :bus-service="busService"
           :is-favorite="
             user.status.loggedIn &&
             user.data.favorite_bus_services.find(
-              (_busService: IBusService) => _busService._id === busService._id
+              (_busService: IBusService) => _busService.id === busService.id
             ) !== undefined
           "
         />

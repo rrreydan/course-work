@@ -1,7 +1,12 @@
 export interface IBusService {
-  _id: string
-  departure_point: IDeparturePoint[]
-  arrival_point: IArrivalPoint[]
+  id: string
+  key: string
+  value: IBusServiceValue
+}
+
+export interface IBusServiceValue {
+  departure_point: IDeparturePoint
+  arrival_point: IArrivalPoint
   departure_date: string
   departure_time: string
   arrival_time: string
@@ -12,8 +17,6 @@ export interface IDeparturePoint {
   title: string
   region: string
   country: string
-  _created: string
-  _changed: string
 }
 
 export interface IArrivalPoint {
@@ -21,6 +24,4 @@ export interface IArrivalPoint {
   title: string
   region: string
   country: string
-  _created: string
-  _changed: string
 }

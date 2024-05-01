@@ -14,14 +14,19 @@ const props = defineProps({
 <template>
   <div class="bus-service-cards-header">
     <div class="title">
-      Расписание автобуса {{ props.busServices[0].departure_point[0].title }} -
-      {{ props.busServices[0].arrival_point[0].title }}
+      Расписание автобуса
+      {{ props.busServices[0].value.departure_point.title }} -
+      {{ props.busServices[0].value.arrival_point.title }}
     </div>
     <div class="date">
       {{
-        formatDateTime(props.busServices[0].departure_date, 'date', 'numeric')
+        formatDateTime(
+          props.busServices[0].value.departure_date,
+          'date',
+          'numeric'
+        )
       }}
-      {{ getWeekDay(props.busServices[0].departure_date) }}
+      {{ getWeekDay(props.busServices[0].value.departure_date) }}
     </div>
   </div>
 </template>

@@ -43,7 +43,7 @@ onMounted(async () => {
 
   for (const user of usersStore.users) {
     for (const busService of user.favorite_bus_services) {
-      if (busService._id === props.busService._id) {
+      if (busService.id === props.busService.id) {
         favoriteCount.value++
       }
     }
@@ -63,27 +63,35 @@ onMounted(async () => {
           <v-col col="4">
             <div class="date-and-time">
               <div class="time">
-                {{ formatDateTime(props.busService.departure_time, 'time') }}
+                {{
+                  formatDateTime(props.busService.value.departure_time, 'time')
+                }}
               </div>
               <div class="date">
-                {{ formatDateTime(props.busService.departure_date, 'date') }}
+                {{
+                  formatDateTime(props.busService.value.departure_date, 'date')
+                }}
               </div>
             </div>
             <div class="title">
-              {{ props.busService.departure_point[0].title }}
+              {{ props.busService.value.departure_point.title }}
             </div>
           </v-col>
           <v-col col="4">
             <div class="date-and-time">
               <div class="time">
-                {{ formatDateTime(props.busService.arrival_time, 'time') }}
+                {{
+                  formatDateTime(props.busService.value.arrival_time, 'time')
+                }}
               </div>
               <div class="date">
-                {{ formatDateTime(props.busService.departure_date, 'date') }}
+                {{
+                  formatDateTime(props.busService.value.departure_date, 'date')
+                }}
               </div>
             </div>
             <div class="title">
-              {{ props.busService.arrival_point[0].title }}
+              {{ props.busService.value.arrival_point.title }}
             </div>
           </v-col>
           <v-col
@@ -117,7 +125,9 @@ onMounted(async () => {
             >
               В избранном
             </v-btn>
-            <div class="favorite-count">В избранном у {{ favoriteCount }} человек</div>
+            <div class="favorite-count">
+              В избранном у {{ favoriteCount }} человек
+            </div>
           </v-col>
         </v-row>
       </v-card-text>
