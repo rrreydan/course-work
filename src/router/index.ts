@@ -18,8 +18,9 @@ const router = createRouter({
       beforeEnter: (to, _, next) => {
         const usersStore = useUsersStore()
         if (
-          usersStore.user.status.loggedIn
-          && usersStore.user.data._id === to.params.userId) {
+          usersStore.user.status.loggedIn &&
+          usersStore.user.data.id === to.params.userId
+        ) {
           next()
         } else {
           next('/')

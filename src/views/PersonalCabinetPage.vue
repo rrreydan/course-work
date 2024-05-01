@@ -17,14 +17,14 @@ const sortBusServices = (): void => {
   if (sortingDown.value) {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(b.departure_time).getTime() -
-        new Date(a.departure_time).getTime()
+        new Date(b.value.departure_time).getTime() -
+        new Date(a.value.departure_time).getTime()
     )
   } else {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(a.departure_time).getTime() -
-        new Date(b.departure_time).getTime()
+        new Date(a.value.departure_time).getTime() -
+        new Date(b.value.departure_time).getTime()
     )
   }
   sortingDown.value = !sortingDown.value
@@ -41,7 +41,7 @@ onMounted(async () => {
   for (const busService of busServices.value) {
     if (
       usersStore.user.data.favorite_bus_services.find(
-        (_busService: IBusService) => _busService._id === busService._id
+        (_busService: IBusService) => _busService.id === busService.id
       ) !== undefined
     ) {
       favoriteBusServices.value.push(busService)
@@ -55,9 +55,7 @@ onMounted(async () => {
 <template>
   <v-main>
     <v-container class="container">
-      <h1 class="title">
-        Личный кабинет
-      </h1>
+      <h1 class="title">Личный кабинет</h1>
       <div
         v-if="favoriteBusServices.length === 0"
         class="empty-favorite"
@@ -65,12 +63,10 @@ onMounted(async () => {
         Вы пока не добавили ни одного рейса в избранное
       </div>
       <div
-        v-else 
+        v-else
         class="bus-service-cards"
       >
-        <h2 class="bus-services-title">
-          Избранные рейсы
-        </h2>
+        <h2 class="bus-services-title">Избранные рейсы</h2>
         <div class="sorting">
           Сортировать:
           <span
@@ -90,7 +86,7 @@ onMounted(async () => {
         </div>
         <BusServiceCard
           v-for="busService in sortedBusServices"
-          :key="busService._id"
+          :key="busService.id"
           :bus-service="busService"
           :is-favorite="true"
         />

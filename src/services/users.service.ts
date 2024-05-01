@@ -1,6 +1,7 @@
 import type { IUser } from '@/interfaces/userInterface'
 import getInstance from './apiInstance'
 import type { IBusService } from '@/interfaces/busServiceInterface'
+import type { IResponse } from '@/interfaces/responseInterface'
 import { useUsersStore } from '@/store/users'
 
 const instance = getInstance()
@@ -8,21 +9,22 @@ const instance = getInstance()
 class UsersService {
   async getUsers(): Promise<IUser[]> {
     return await instance
-      .get('websiteusers')
-      .then((res) => res.data)
+      .get('_design/websiteusers/_view/all-websiteusers')
+      .then((res) => res.data.rows)
       .catch((err) => console.log(err))
   }
 
   async getUserById(id: string): Promise<IUser> {
     return await instance
-      .get('websiteusers/' + id)
+      .get('/' + id)
       .then((res) => res.data)
       .catch((err) => console.log(err))
   }
 
-  async addUser(email: string, password: string): Promise<IUser> {
+  async addUser(email: string, password: string): Promise<IResponse> {
     return await instance
-      .post('websiteusers', {
+      .put(`/${email}`, {
+        type: 'websiteuser',
         email,
         password,
         favorite_bus_services: []
@@ -51,7 +53,7 @@ class UsersService {
     const userId = usersStore.user.data._id
     const newFavoriteBusServices =
       usersStore.user.data.favorite_bus_services.filter(
-        (service: IBusService) => service._id !== busService._id
+        (service: IBusService) => service.id !== busService.id
       )
 
     return instance

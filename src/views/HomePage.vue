@@ -88,7 +88,7 @@ onMounted(() => {
           :bus-service="busService"
           :is-favorite="
             user.status.loggedIn &&
-            user.data.favorite_bus_services.find(
+            user.data.value.favorite_bus_services.find(
               (_busService: IBusService) => _busService.id === busService.id
             ) !== undefined
           "

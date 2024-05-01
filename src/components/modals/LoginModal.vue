@@ -23,7 +23,8 @@ const loginHandler = async () => {
   await usersStore.getUsers()
   users.value = usersStore.users
   const user = users.value.find(
-    (user) => user.email === email.value && user.password === password.value
+    (user) =>
+      user.value.email === email.value && user.value.password === password.value
   )
 
   if (user === undefined) {

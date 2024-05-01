@@ -26,7 +26,7 @@ export const useUsersStore = defineStore('users', {
 
     async registerUser(email: string, password: string) {
       const response = await UsersService.addUser(email, password)
-      const user = await this.getUserById(response._id)
+      const user = await this.getUserById(response.id)
       this.loginUser(user)
     },
 

@@ -42,7 +42,7 @@ onMounted(async () => {
   await usersStore.getUsers()
 
   for (const user of usersStore.users) {
-    for (const busService of user.favorite_bus_services) {
+    for (const busService of user.value.favorite_bus_services) {
       if (busService.id === props.busService.id) {
         favoriteCount.value++
       }
