@@ -22,7 +22,10 @@ class BusServicesService {
       q.arrival_point === null &&
       q.departure_date === null
     )
-      return []
+      return await instance
+        .get('_design/busservices/_view/all-busservices', {})
+        .then((res) => res.data.rows)
+        .catch((err) => console.log(err))
     else {
       if (q.departure_date) departureDate = new Date(q.departure_date)
     }

@@ -24,7 +24,7 @@ const favoriteCount = ref(0)
 
 const addToFavorites = async () => {
   await UsersService.addFavoriteBusService(props.busService)
-  const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
+  const updatedUser = await UsersService.getUserById(usersStore.user.data.id)
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = true
   favoriteCount.value++
@@ -32,7 +32,7 @@ const addToFavorites = async () => {
 
 const removeFromFavorites = async () => {
   await UsersService.removeFavoriteBusService(props.busService)
-  const updatedUser = await UsersService.getUserById(usersStore.user.data._id)
+  const updatedUser = await UsersService.getUserById(usersStore.user.data.id)
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = false
   favoriteCount.value--

@@ -15,15 +15,17 @@ class UsersService {
   }
 
   async getUserById(id: string): Promise<IUser> {
-    return await instance
-      .get('/' + id)
-      .then((res) => res.data)
+    const response = await instance
+      .get('_design/websiteusers/_view/all-websiteusers')
+      .then((res) => res.data.rows)
       .catch((err) => console.log(err))
+
+    return response.find((user: IUser) => user.id === id)
   }
 
   async addUser(email: string, password: string): Promise<IResponse> {
     return await instance
-      .put(`/${email}`, {
+      .put('/' + email, {
         type: 'websiteuser',
         email,
         password,
@@ -35,12 +37,21 @@ class UsersService {
 
   async addFavoriteBusService(busService: IBusService): Promise<IUser> {
     const usersStore = useUsersStore()
-    const userId = usersStore.user.data._id
+    const userId = usersStore.user.data.id
 
-    return instance
-      .patch('websiteusers/' + userId, {
+    const response = await instance
+      .head('/' + userId)
+      .then((res) => res.headers.etag)
+      .catch((err) => console.log(err))
+
+    return await instance
+      .put('/' + userId, {
+        _rev: response.toString().replace(/"/g, ''),
+        type: 'websiteuser',
+        email: usersStore.user.data.value.email,
+        password: usersStore.user.data.value.password,
         favorite_bus_services: [
-          ...usersStore.user.data.favorite_bus_services,
+          ...usersStore.user.data.value.favorite_bus_services,
           busService
         ]
       })
@@ -50,14 +61,23 @@ class UsersService {
 
   async removeFavoriteBusService(busService: IBusService): Promise<IUser> {
     const usersStore = useUsersStore()
-    const userId = usersStore.user.data._id
+    const userId = usersStore.user.data.id
     const newFavoriteBusServices =
-      usersStore.user.data.favorite_bus_services.filter(
+      usersStore.user.data.value.favorite_bus_services.filter(
         (service: IBusService) => service.id !== busService.id
       )
 
-    return instance
-      .patch('websiteusers/' + userId, {
+    const response = await instance
+      .head('/' + userId)
+      .then((res) => res.headers.etag)
+      .catch((err) => console.log(err))
+
+    return await instance
+      .put('/' + userId, {
+        _rev: response.toString().replace(/"/g, ''),
+        type: 'websiteuser',
+        email: usersStore.user.data.value.email,
+        password: usersStore.user.data.value.password,
         favorite_bus_services: [...newFavoriteBusServices]
       })
       .then((res) => res.data)

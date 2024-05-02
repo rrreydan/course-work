@@ -28,6 +28,13 @@ onMounted(async () => {
 })
 
 const searchBusServices = async () => {
+  if (
+    selectedDeparturePoint.value === null ||
+    selectedArrivalPoint.value === null ||
+    departureDate.value === null
+  )
+    return
+
   await busServicesStore.getBusServices(
     selectedDeparturePoint.value,
     selectedArrivalPoint.value,

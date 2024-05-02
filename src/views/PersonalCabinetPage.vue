@@ -37,10 +37,11 @@ watch(busServices, () => {
 onMounted(async () => {
   await busServicesStore.getBusServices(null, null, null)
   busServices.value = busServicesStore.busServices
+  console.log(busServices.value)
 
   for (const busService of busServices.value) {
     if (
-      usersStore.user.data.favorite_bus_services.find(
+      usersStore.user.data.value.favorite_bus_services.find(
         (_busService: IBusService) => _busService.id === busService.id
       ) !== undefined
     ) {
