@@ -13,7 +13,7 @@ watch(router.currentRoute, () => {
 </script>
 
 <template>
-  <v-header>
+  <header>
     <TheTopNavbar />
     <div
       v-if="currentRoute === 'home'"
@@ -23,7 +23,7 @@ watch(router.currentRoute, () => {
         <SearchCard />
       </v-container>
     </div>
-  </v-header>
+  </header>
 </template>
 
 <style lang="scss" scoped>

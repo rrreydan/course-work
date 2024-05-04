@@ -37,7 +37,6 @@ watch(busServices, () => {
 onMounted(async () => {
   await busServicesStore.getBusServices(null, null, null)
   busServices.value = busServicesStore.busServices
-  console.log(busServices.value)
 
   for (const busService of busServices.value) {
     if (
