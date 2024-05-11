@@ -15,13 +15,11 @@ export const useUsersStore = defineStore('users', {
   }),
   actions: {
     async getUsers() {
-      const response = await UsersService.getUsers()
-      this.users = response
+      this.users = await UsersService.getUsers()
     },
 
     async getUserById(id: string) {
-      const response = await UsersService.getUserById(id)
-      return response
+      return await UsersService.getUserById(id)
     },
 
     async registerUser(email: string, password: string) {

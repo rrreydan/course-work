@@ -29,7 +29,8 @@ class UsersService {
         type: 'websiteuser',
         email,
         password,
-        favorite_bus_services: []
+        favorite_bus_services: [],
+        is_admin: false
       })
       .then((res) => res.data)
       .catch((err) => console.log(err))
@@ -53,7 +54,8 @@ class UsersService {
         favorite_bus_services: [
           ...usersStore.user.data.value.favorite_bus_services,
           busService
-        ]
+        ],
+        is_admin: usersStore.user.data.value.is_admin
       })
       .then((res) => res.data)
       .catch((err) => console.log(err))
@@ -78,7 +80,8 @@ class UsersService {
         type: 'websiteuser',
         email: usersStore.user.data.value.email,
         password: usersStore.user.data.value.password,
-        favorite_bus_services: [...newFavoriteBusServices]
+        favorite_bus_services: [...newFavoriteBusServices],
+        is_admin: usersStore.user.data.value.is_admin
       })
       .then((res) => res.data)
       .catch((err) => console.log(err))

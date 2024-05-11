@@ -9,5 +9,6 @@ export interface IUser {
 export interface IUserValue {
   email: string
   password: string
-  favorite_bus_services: IBusService[]
+  favorite_bus_services: IBusService[],
+  is_admin: boolean
 }
