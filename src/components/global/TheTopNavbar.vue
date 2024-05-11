@@ -21,7 +21,7 @@ const logoutHandler = () => {
           icon="mdi-compass-outline"
           size="large"
         />
-        <p>Andrey Bus</p>
+        <p>Andrey Bus {{ usersStore.user.status.loggedIn && usersStore.user.data.value.is_admin ? '(Админ)' : '' }}</p>
       </router-link>
       <div class="other-buttons">
         <LoginModal v-if="!usersStore.user.status.loggedIn" />

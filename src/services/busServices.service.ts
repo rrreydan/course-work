@@ -1,8 +1,4 @@
-import type {
-  IBusService,
-  IDeparturePoint,
-  IArrivalPoint
-} from '@/interfaces/busServiceInterface'
+import type { IArrivalPoint, IBusService, IDeparturePoint } from '@/interfaces/busServiceInterface'
 import getInstance from './apiInstance'
 
 interface IQuery {
@@ -39,12 +35,26 @@ class BusServicesService {
       if (
         q.departure_point?.title === busService.value.departure_point.title &&
         q.arrival_point?.title === busService.value.arrival_point.title &&
-        departureDate.toISOString() ===
-          new Date(busService.value.departure_date).toISOString()
+        departureDate.toISOString() === new Date(busService.value.departure_date).toISOString()
       ) {
         return true
       }
     })
+  }
+
+  async deleteBusService(busServiceId: string): Promise<void> {
+    const response = await instance
+      .head('/' + busServiceId)
+      .then((res) => res.headers.etag)
+      .catch((err) => console.log(err))
+
+    await instance
+      .delete('/' + busServiceId, {
+        params: {
+          rev: response.toString().replace(/"/g, '')
+        }
+      })
+      .catch((err) => console.log(err))
   }
 }
 

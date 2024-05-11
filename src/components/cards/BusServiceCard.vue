@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import type { IBusService } from '@/interfaces/busServiceInterface'
-import { onMounted, ref, type PropType } from 'vue'
+import { onMounted, type PropType, ref } from 'vue'
 import { formatDateTime } from '@/utils/dates'
 import { useUsersStore } from '@/store/users'
 import LoginModal from '../modals/LoginModal.vue'
 import UsersService from '@/services/users.service'
+import BusServicesService from '@/services/busServices.service'
+import { useBusServicesStore } from '@/store/busServices'
 
 const usersStore = useUsersStore()
+const busServicesStore = useBusServicesStore()
 
 const props = defineProps({
   busService: {
@@ -36,6 +39,11 @@ const removeFromFavorites = async () => {
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = false
   favoriteCount.value--
+}
+
+const deleteBusService = async (busServiceId: string) => {
+  await BusServicesService.deleteBusService(busServiceId)
+  busServicesStore.busServices = busServicesStore.busServices.filter(busService => busService.id !== busServiceId)
 }
 
 onMounted(async () => {
@@ -98,33 +106,43 @@ onMounted(async () => {
             cols="4"
             class="last-column"
           >
-            <LoginModal
-              v-if="!usersStore.user.status.loggedIn"
-              :is-favorite-button="true"
-            />
-            <v-btn
-              v-else-if="!isFavoriteRef"
-              class="text-none"
-              size="large"
-              rounded="lg"
-              variant="flat"
-              color="#1A5EC6"
-              prepend-icon="mdi-star"
-              @click="addToFavorites"
-            >
-              Добавить в избранное
-            </v-btn>
-            <v-btn
-              v-else-if="isFavoriteRef"
-              class="text-none"
-              size="large"
-              rounded="lg"
-              variant="outlined"
-              prepend-icon="mdi-star"
-              @click="removeFromFavorites"
-            >
-              В избранном
-            </v-btn>
+            <div class="last-column-buttons">
+              <LoginModal
+                v-if="!usersStore.user.status.loggedIn"
+                :is-favorite-button="true"
+              />
+              <v-btn
+                v-else-if="!isFavoriteRef"
+                class="text-none"
+                size="large"
+                rounded="lg"
+                variant="flat"
+                color="#1A5EC6"
+                prepend-icon="mdi-star"
+                @click="addToFavorites"
+              >
+                Добавить в избранное
+              </v-btn>
+              <v-btn
+                v-else-if="isFavoriteRef"
+                class="text-none"
+                size="large"
+                rounded="lg"
+                variant="outlined"
+                prepend-icon="mdi-star"
+                @click="removeFromFavorites"
+              >
+                В избранном
+              </v-btn>
+              <v-btn
+                v-if="usersStore.user.status.loggedIn && usersStore.user.data.value.is_admin"
+                rounded="lg"
+                variant="flat"
+                color="#ff0f0f"
+                icon="mdi-delete"
+                @click="deleteBusService(props.busService.id)"
+              />
+            </div>
             <div class="favorite-count">
               В избранном у {{ favoriteCount }} человек
             </div>
@@ -171,6 +189,12 @@ onMounted(async () => {
   flex-direction: column;
   align-items: flex-end;
   justify-content: center;
+  gap: 0.3rem;
+}
+
+.last-column-buttons {
+  display: flex;
+  align-items: center;
   gap: 0.3rem;
 }
 </style>
