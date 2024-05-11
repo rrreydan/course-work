@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import LoginModal from '@/components/modals/LoginModal.vue'
 import { useUsersStore } from '@/store/users'
+import AddBusServiceModal from '@/components/modals/AddBusServiceModal.vue'
 
 const usersStore = useUsersStore()
 
@@ -29,6 +30,7 @@ const logoutHandler = () => {
           class="logged-in-menu"
           v-else
         >
+          <AddBusServiceModal v-if="usersStore.user.data.value.is_admin" />
           <router-link
             class="hover-underline-animation"
             :to="`/personal-cabinet/${usersStore.user.data.id}`"

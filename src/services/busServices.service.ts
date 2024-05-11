@@ -44,6 +44,19 @@ class BusServicesService {
     })
   }
 
+  async addBusService(busService: IBusService): Promise<void> {
+    await instance
+      .put('/' + busService.id, {
+        type: 'busservice',
+        departure_point: busService.value.departure_point,
+        arrival_point: busService.value.arrival_point,
+        departure_date: busService.value.departure_date,
+        arrival_date: busService.value.arrival_date
+      })
+      .then((res) => res.data)
+      .then((err) => console.log(err))
+  }
+
   async updateBusService(busService: IBusService): Promise<void> {
     const response = await instance
       .head('/' + busService.id)
