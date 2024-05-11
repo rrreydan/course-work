@@ -1,32 +1,26 @@
 <script setup lang="ts">
 import { formatDateTime, getWeekDay } from '@/utils/dates'
-import { type PropType } from 'vue'
-import type { IBusService } from '@/interfaces/busServiceInterface'
+import { useBusServicesStore } from '@/store/busServices'
 
-const props = defineProps({
-  busServices: {
-    type: Array as PropType<IBusService[]>,
-    required: true
-  }
-})
+const busServicesStore = useBusServicesStore()
 </script>
 
 <template>
   <div class="bus-service-cards-header">
     <div class="title">
       Расписание автобуса
-      {{ props.busServices[0].value.departure_point.title }} -
-      {{ props.busServices[0].value.arrival_point.title }}
+      {{ busServicesStore.busServices[0].value.departure_point.title }} -
+      {{ busServicesStore.busServices[0].value.arrival_point.title }}
     </div>
     <div class="date">
       {{
         formatDateTime(
-          props.busServices[0].value.departure_date,
+          busServicesStore.busServices[0].value.departure_date,
           'date',
           'numeric'
         )
       }}
-      {{ getWeekDay(props.busServices[0].value.departure_date) }}
+      {{ getWeekDay(busServicesStore.busServices[0].value.departure_date) }}
     </div>
   </div>
 </template>

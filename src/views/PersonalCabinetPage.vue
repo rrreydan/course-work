@@ -17,14 +17,14 @@ const sortBusServices = (): void => {
   if (sortingDown.value) {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(b.value.departure_time).getTime() -
-        new Date(a.value.departure_time).getTime()
+        new Date(b.value.departure_date).getTime() -
+        new Date(a.value.departure_date).getTime()
     )
   } else {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(a.value.departure_time).getTime() -
-        new Date(b.value.departure_time).getTime()
+        new Date(a.value.departure_date).getTime() -
+        new Date(b.value.departure_date).getTime()
     )
   }
   sortingDown.value = !sortingDown.value
@@ -49,6 +49,11 @@ onMounted(async () => {
   }
 
   sortedBusServices.value = favoriteBusServices.value
+  sortedBusServices.value.sort(
+    (a, b) =>
+      new Date(a.value.departure_date).getTime() -
+      new Date(b.value.departure_date).getTime()
+  )
 })
 </script>
 

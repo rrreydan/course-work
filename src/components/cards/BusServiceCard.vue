@@ -95,7 +95,7 @@ onMounted(async () => {
               </div>
               <div class="date">
                 {{
-                  formatDateTime(props.busService.value.departure_date, 'date')
+                  formatDateTime(props.busService.value.arrival_date, 'date')
                 }}
               </div>
             </div>

@@ -4,7 +4,7 @@ import { useUsersStore } from '@/store/users'
 import type { IBusService } from '@/interfaces/busServiceInterface'
 import BusServiceCard from '@/components/cards/BusServiceCard.vue'
 import BusServiceCardsHeader from '@/components/ui/BusServiceCardsHeader.vue'
-import { watch, ref, onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import type { IUser } from '@/interfaces/userInterface'
 
 const busServicesStore = useBusServicesStore()
@@ -17,7 +17,11 @@ const sortingDown = ref(true)
 
 busServicesStore.$subscribe((_, state) => {
   busServices.value = state.busServices
-  sortedBusServices.value = state.busServices
+  sortedBusServices.value = state.busServices.sort(
+    (a, b) =>
+      new Date(a.value.departure_date).getTime() -
+      new Date(b.value.departure_date).getTime()
+  )
 })
 
 usersStore.$subscribe((_, state) => {
@@ -29,14 +33,14 @@ const sortBusServices = (): void => {
   if (sortingDown.value) {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(b.value.departure_time).getTime() -
-        new Date(a.value.departure_time).getTime()
+        new Date(b.value.departure_date).getTime() -
+        new Date(a.value.departure_date).getTime()
     )
   } else {
     sortedBusServices.value.sort(
       (a, b) =>
-        new Date(a.value.departure_time).getTime() -
-        new Date(b.value.departure_time).getTime()
+        new Date(a.value.departure_date).getTime() -
+        new Date(b.value.departure_date).getTime()
     )
   }
   sortingDown.value = !sortingDown.value
