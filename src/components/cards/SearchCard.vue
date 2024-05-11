@@ -21,12 +21,6 @@ const itemProps = (item: ICity) => {
   }
 }
 
-onMounted(async () => {
-  await citiesStore.getCities()
-  departurePoints.value = citiesStore.cities
-  arrivalPoints.value = citiesStore.cities
-})
-
 const searchBusServices = async () => {
   if (
     selectedDeparturePoint.value === null ||
@@ -41,6 +35,12 @@ const searchBusServices = async () => {
     departureDate.value
   )
 }
+
+onMounted(async () => {
+  await citiesStore.getCities()
+  departurePoints.value = citiesStore.cities
+  arrivalPoints.value = citiesStore.cities
+})
 </script>
 
 <template>
@@ -69,7 +69,6 @@ const searchBusServices = async () => {
             :items="arrivalPoints"
             :item-props="itemProps"
             item-title="title"
-            item-value="value"
             label="Пункт прибытия"
             variant="outlined"
             hide-details

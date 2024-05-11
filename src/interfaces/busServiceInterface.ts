@@ -8,8 +8,7 @@ export interface IBusServiceValue {
   departure_point: IDeparturePoint
   arrival_point: IArrivalPoint
   departure_date: string
-  departure_time: string
-  arrival_time: string
+  arrival_date: string
 }
 
 export interface IDeparturePoint {

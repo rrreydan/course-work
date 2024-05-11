@@ -7,6 +7,7 @@ import LoginModal from '../modals/LoginModal.vue'
 import UsersService from '@/services/users.service'
 import BusServicesService from '@/services/busServices.service'
 import { useBusServicesStore } from '@/store/busServices'
+import EditBusServiceModal from '@/components/modals/EditBusServiceModal.vue'
 
 const usersStore = useUsersStore()
 const busServicesStore = useBusServicesStore()
@@ -72,7 +73,7 @@ onMounted(async () => {
             <div class="date-and-time">
               <div class="time">
                 {{
-                  formatDateTime(props.busService.value.departure_time, 'time')
+                  formatDateTime(props.busService.value.departure_date, 'time')
                 }}
               </div>
               <div class="date">
@@ -89,7 +90,7 @@ onMounted(async () => {
             <div class="date-and-time">
               <div class="time">
                 {{
-                  formatDateTime(props.busService.value.arrival_time, 'time')
+                  formatDateTime(props.busService.value.arrival_date, 'time')
                 }}
               </div>
               <div class="date">
@@ -141,6 +142,10 @@ onMounted(async () => {
                 color="#ff0f0f"
                 icon="mdi-delete"
                 @click="deleteBusService(props.busService.id)"
+              />
+              <EditBusServiceModal
+                v-if="usersStore.user.status.loggedIn && usersStore.user.data.value.is_admin"
+                :bus-service="props.busService"
               />
             </div>
             <div class="favorite-count">

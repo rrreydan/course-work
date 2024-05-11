@@ -32,14 +32,35 @@ class BusServicesService {
       .catch((err) => console.log(err))
 
     return response.filter((busService: IBusService) => {
+      const comparedDate = new Date(busService.value.departure_date)
+      const timezoneOffset = comparedDate.getTimezoneOffset() * 60000
       if (
         q.departure_point?.title === busService.value.departure_point.title &&
         q.arrival_point?.title === busService.value.arrival_point.title &&
-        departureDate.toISOString() === new Date(busService.value.departure_date).toISOString()
+        departureDate.toDateString() === new Date(comparedDate.getTime() + timezoneOffset).toDateString()
       ) {
         return true
       }
     })
+  }
+
+  async updateBusService(busService: IBusService): Promise<void> {
+    const response = await instance
+      .head('/' + busService.id)
+      .then((res) => res.headers.etag)
+      .catch((err) => console.log(err))
+
+    await instance
+      .put('/' + busService.id, {
+        _rev: response.toString().replace(/"/g, ''),
+        type: 'busservice',
+        departure_point: busService.value.departure_point,
+        arrival_point: busService.value.arrival_point,
+        departure_date: busService.value.departure_date,
+        arrival_date: busService.value.arrival_date
+      })
+      .then((res) => res.data)
+      .then((err) => console.log(err))
   }
 
   async deleteBusService(busServiceId: string): Promise<void> {
