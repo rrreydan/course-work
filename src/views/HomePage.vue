@@ -15,8 +15,10 @@ const sortedBusServices = ref([] as IBusService[])
 const user = ref({} as { status: { loggedIn: boolean }; data: IUser })
 const sortingDown = ref(true)
 
+// Если пользователь выбрал новые данные для поиска, то обновляем список рейсов
 busServicesStore.$subscribe((_, state) => {
   busServices.value = state.busServices
+  // Сортируем их по времени
   sortedBusServices.value = state.busServices.sort(
     (a, b) =>
       new Date(a.value.departure_date).getTime() -
@@ -24,10 +26,12 @@ busServicesStore.$subscribe((_, state) => {
   )
 })
 
+// Если пользователь обновляется, то обновляем его на странице
 usersStore.$subscribe((_, state) => {
   user.value = state.user
 })
 
+// Функция сортировки автобусных рейсов по времени
 const sortBusServices = (): void => {
   sortedBusServices.value = busServices.value
   if (sortingDown.value) {
@@ -50,6 +54,7 @@ watch(busServices, () => {
   sortingDown.value = true
 })
 
+// Подгружаем пользователя
 onMounted(() => {
   user.value = usersStore.user
 })

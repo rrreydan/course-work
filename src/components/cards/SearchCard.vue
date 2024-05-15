@@ -21,7 +21,9 @@ const itemProps = (item: ICity) => {
   }
 }
 
+// Функция поиска необходимых рейсов
 const searchBusServices = async () => {
+  // Если введенные данные пустые, то ничего не показываем
   if (
     selectedDeparturePoint.value === null ||
     selectedArrivalPoint.value === null ||
@@ -29,6 +31,7 @@ const searchBusServices = async () => {
   )
     return
 
+  // Получаем данные из БД
   await busServicesStore.getBusServices(
     selectedDeparturePoint.value,
     selectedArrivalPoint.value,
@@ -36,6 +39,7 @@ const searchBusServices = async () => {
   )
 }
 
+// Подгружаем города
 onMounted(async () => {
   await citiesStore.getCities()
   departurePoints.value = citiesStore.cities

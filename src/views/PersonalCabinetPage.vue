@@ -34,10 +34,12 @@ watch(busServices, () => {
   sortingDown.value = true
 })
 
+// Подгружаем избранные рейсы
 onMounted(async () => {
-  await busServicesStore.getBusServices(null, null, null)
+  await busServicesStore.getBusServices(null, null, null) // Получаем все рейсы
   busServices.value = busServicesStore.busServices
 
+  // Ищем среди них те, что добавлены пользователем в избранные
   for (const busService of busServices.value) {
     if (
       usersStore.user.data.value.favorite_bus_services.find(
@@ -48,6 +50,7 @@ onMounted(async () => {
     }
   }
 
+  // Сортируем их
   sortedBusServices.value = favoriteBusServices.value
   sortedBusServices.value.sort(
     (a, b) =>

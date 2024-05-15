@@ -9,12 +9,15 @@ const password = ref('')
 const repeatPassword = ref('')
 const dialog = ref(false)
 
+// Функция регистрации пользователя
 const registerHandler = async () => {
+  // Если пароли не совпадают, то выводим ошибку
   if (password.value !== repeatPassword.value) {
     alert('Пароли не совпадают')
     return
   }
 
+  // Отлавливаем ошибку регистрации существующего пользователя
   try {
     await usersStore.registerUser(email.value, password.value)
     dialog.value = false

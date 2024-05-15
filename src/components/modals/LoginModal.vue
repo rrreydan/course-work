@@ -19,18 +19,20 @@ const password = ref('')
 const users = ref([] as IUser[])
 const dialog = ref(false)
 
+// Функция входа в аккаунт
 const loginHandler = async () => {
-  await usersStore.getUsers()
+  await usersStore.getUsers() // Получаем всех пользователей
   users.value = usersStore.users
   const user = users.value.find(
     (user) =>
       user.value.email === email.value && user.value.password === password.value
-  )
+  ) // Находим нужного пользователя по email и паролю
 
+  // Если пользователь не был найден, то выводим ошибку
   if (user === undefined) {
     alert('Неправильный логин или пароль')
   } else {
-    usersStore.loginUser(user)
+    usersStore.loginUser(user) // Иначе загружаем пользователя в локальное хранилище
     dialog.value = false
   }
 }

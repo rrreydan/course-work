@@ -2,6 +2,7 @@ import type { IUser } from '@/interfaces/userInterface'
 import { defineStore } from 'pinia'
 import UsersService from '@/services/users.service'
 
+// Подгружаем пользователя из локального хранилища
 const localStorageUser = localStorage.getItem('user')
   ? JSON.parse(localStorage.getItem('user') as string)
   : null
@@ -19,20 +20,18 @@ export const useUsersStore = defineStore('users', {
       this.users = await usersService.getUsers()
     },
 
-    async getUserById(id: string) {
-      return await usersService.getUserById(id)
-    },
-
-    async registerUser(email: string, password: string) {
-      const response = await usersService.addUser(email, password)
-      const user = await this.getUserById(response.id)
-      this.loginUser(user)
-    },
-
+    // Метод входа в аккаунт
     loginUser(user: IUser) {
-      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('user', JSON.stringify(user)) // Обновляем пользователя в локальном хранилище
       this.user.status.loggedIn = true
       this.user.data = user
+    },
+
+    // Метод регистрации пользоватлея
+    async registerUser(email: string, password: string) {
+      const response = await usersService.addUser(email, password) // Добавляем пользователя
+      const user = await usersService.getUserById(response.id) // Получаем только что созданного пользователя
+      this.loginUser(user) // Входим в аккаунт
     },
 
     logoutUser() {

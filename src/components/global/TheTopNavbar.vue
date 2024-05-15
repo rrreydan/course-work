@@ -5,9 +5,10 @@ import AddBusServiceModal from '@/components/modals/AddBusServiceModal.vue'
 
 const usersStore = useUsersStore()
 
+// Функция выхода пользователя из аккаунта
 const logoutHandler = () => {
   usersStore.logoutUser()
-  window.location.reload()
+  location.reload()
 }
 </script>
 
