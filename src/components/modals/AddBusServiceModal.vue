@@ -5,6 +5,7 @@ import { useCitiesStore } from '@/store/cities'
 import BusServicesService from '@/services/busServices.service'
 
 const citiesStore = useCitiesStore()
+const busServicesService = new BusServicesService()
 
 const departurePoints = ref([] as ICity[])
 const arrivalPoints = ref([] as ICity[])
@@ -21,17 +22,23 @@ const itemProps = (item: ICity) => {
   }
 }
 
+// Функция добавления рейса
 const addBusService = async () => {
+  // Проверка корректности введенных данных
   if (
-    selectedDeparturePoint.value === null || selectedArrivalPoint.value === null ||
-    selectedDeparturePoint.value?.value.title === selectedArrivalPoint.value?.value.title ||
-    departureDate.value === null || arrivalDate.value === null ||
+    selectedDeparturePoint.value === null ||
+    selectedArrivalPoint.value === null ||
+    selectedDeparturePoint.value?.value.title ===
+      selectedArrivalPoint.value?.value.title ||
+    departureDate.value === null ||
+    arrivalDate.value === null ||
     arrivalDate.value.getTime() < departureDate.value.getTime()
   ) {
     alert('Некоторые данные некорректны. Измените их и попробуйте еще раз')
     return
   }
 
+  // Формирование нового автобусного рейса для отправки его в БД
   const timezoneOffset = departureDate.value!.getTimezoneOffset() * 60000
   const newBusService = {
     id:
@@ -53,17 +60,29 @@ const addBusService = async () => {
         region: '',
         country: ''
       },
-      departure_date: new Date(departureDate.value!.getTime() - timezoneOffset).toISOString(),
-      arrival_date: new Date(arrivalDate.value!.getTime() - timezoneOffset).toISOString()
+      departure_date: new Date(
+        departureDate.value!.getTime() - timezoneOffset
+      ).toISOString(),
+      arrival_date: new Date(
+        arrivalDate.value!.getTime() - timezoneOffset
+      ).toISOString()
     }
   }
-  Object.assign(newBusService.value.departure_point, selectedDeparturePoint.value?.value)
-  Object.assign(newBusService.value.arrival_point, selectedArrivalPoint.value?.value)
+  Object.assign(
+    newBusService.value.departure_point,
+    selectedDeparturePoint.value?.value
+  )
+  Object.assign(
+    newBusService.value.arrival_point,
+    selectedArrivalPoint.value?.value
+  )
 
-  await BusServicesService.addBusService(newBusService)
+  // Отправка автобусного рейса в БД
+  await busServicesService.addBusService(newBusService)
   location.reload()
 }
 
+// Подгрузка городов из БД
 onMounted(async () => {
   await citiesStore.getCities()
   departurePoints.value = citiesStore.cities
@@ -199,3 +218,4 @@ onMounted(async () => {
   margin-top: 1.5rem;
 }
 </style>
+

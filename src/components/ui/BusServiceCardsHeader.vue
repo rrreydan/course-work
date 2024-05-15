@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { formatDateTime, getWeekDay } from '@/utils/dates'
+import DateTimeFormatter from '@/utils/dateTimeFormatter'
 import { useBusServicesStore } from '@/store/busServices'
 
 const busServicesStore = useBusServicesStore()
+const dateTimeFormatter = new DateTimeFormatter()
 </script>
 
 <template>
@@ -14,13 +15,13 @@ const busServicesStore = useBusServicesStore()
     </div>
     <div class="date">
       {{
-        formatDateTime(
+        dateTimeFormatter.formatDateTime(
           busServicesStore.busServices[0].value.departure_date,
           'date',
           'numeric'
         )
       }}
-      {{ getWeekDay(busServicesStore.busServices[0].value.departure_date) }}
+      {{ dateTimeFormatter.getWeekDay(busServicesStore.busServices[0].value.departure_date) }}
     </div>
   </div>
 </template>

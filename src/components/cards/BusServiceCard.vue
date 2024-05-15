@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { IBusService } from '@/interfaces/busServiceInterface'
 import { onMounted, type PropType, ref } from 'vue'
-import { formatDateTime } from '@/utils/dates'
+import DateTimeFormatter from '@/utils/dateTimeFormatter'
 import { useUsersStore } from '@/store/users'
 import LoginModal from '../modals/LoginModal.vue'
 import UsersService from '@/services/users.service'
@@ -11,6 +11,9 @@ import EditBusServiceModal from '@/components/modals/EditBusServiceModal.vue'
 
 const usersStore = useUsersStore()
 const busServicesStore = useBusServicesStore()
+const dateTimeFormatter = new DateTimeFormatter()
+const usersService = new UsersService()
+const busServicesService = new BusServicesService()
 
 const props = defineProps({
   busService: {
@@ -26,27 +29,33 @@ const props = defineProps({
 const isFavoriteRef = ref(props.isFavorite)
 const favoriteCount = ref(0)
 
+// Функция добавления рейса в избранное
 const addToFavorites = async () => {
-  await UsersService.addFavoriteBusService(props.busService)
-  const updatedUser = await UsersService.getUserById(usersStore.user.data.id)
-  usersStore.loginUser(updatedUser)
+  await usersService.addFavoriteBusService(props.busService) // Вызываем метод класса UsersService
+  const updatedUser = await usersService.getUserById(usersStore.user.data.id) // Получаем обновленного пользователя из БД
+  usersStore.loginUser(updatedUser) // Обновим локальное хранилище
   isFavoriteRef.value = true
   favoriteCount.value++
 }
 
+// Функция удаления рейса из избранного
 const removeFromFavorites = async () => {
-  await UsersService.removeFavoriteBusService(props.busService)
-  const updatedUser = await UsersService.getUserById(usersStore.user.data.id)
+  await usersService.removeFavoriteBusService(props.busService)
+  const updatedUser = await usersService.getUserById(usersStore.user.data.id)
   usersStore.loginUser(updatedUser)
   isFavoriteRef.value = false
   favoriteCount.value--
 }
 
+// Функция удаления автобусного рейса
 const deleteBusService = async (busServiceId: string) => {
-  await BusServicesService.deleteBusService(busServiceId)
-  busServicesStore.busServices = busServicesStore.busServices.filter(busService => busService.id !== busServiceId)
+  await busServicesService.deleteBusService(busServiceId)
+  busServicesStore.busServices = busServicesStore.busServices.filter(
+    (busService) => busService.id !== busServiceId
+  )
 }
 
+// При загрузке компонента получаем количество людей, которые добавили этот рейс в избранное
 onMounted(async () => {
   await usersStore.getUsers()
 
@@ -73,12 +82,18 @@ onMounted(async () => {
             <div class="date-and-time">
               <div class="time">
                 {{
-                  formatDateTime(props.busService.value.departure_date, 'time')
+                  dateTimeFormatter.formatDateTime(
+                    props.busService.value.departure_date,
+                    'time'
+                  )
                 }}
               </div>
               <div class="date">
                 {{
-                  formatDateTime(props.busService.value.departure_date, 'date')
+                  dateTimeFormatter.formatDateTime(
+                    props.busService.value.departure_date,
+                    'date'
+                  )
                 }}
               </div>
             </div>
@@ -90,12 +105,18 @@ onMounted(async () => {
             <div class="date-and-time">
               <div class="time">
                 {{
-                  formatDateTime(props.busService.value.arrival_date, 'time')
+                  dateTimeFormatter.formatDateTime(
+                    props.busService.value.arrival_date,
+                    'time'
+                  )
                 }}
               </div>
               <div class="date">
                 {{
-                  formatDateTime(props.busService.value.arrival_date, 'date')
+                  dateTimeFormatter.formatDateTime(
+                    props.busService.value.arrival_date,
+                    'date'
+                  )
                 }}
               </div>
             </div>
@@ -136,7 +157,10 @@ onMounted(async () => {
                 В избранном
               </v-btn>
               <v-btn
-                v-if="usersStore.user.status.loggedIn && usersStore.user.data.value.is_admin"
+                v-if="
+                  usersStore.user.status.loggedIn &&
+                  usersStore.user.data.value.is_admin
+                "
                 rounded="lg"
                 variant="flat"
                 color="#ff0f0f"
@@ -144,7 +168,10 @@ onMounted(async () => {
                 @click="deleteBusService(props.busService.id)"
               />
               <EditBusServiceModal
-                v-if="usersStore.user.status.loggedIn && usersStore.user.data.value.is_admin"
+                v-if="
+                  usersStore.user.status.loggedIn &&
+                  usersStore.user.data.value.is_admin
+                "
                 :bus-service="props.busService"
               />
             </div>

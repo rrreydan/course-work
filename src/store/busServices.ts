@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import BusServicesService from '@/services/busServices.service'
 import type { IArrivalPoint, IBusService, IDeparturePoint } from '@/interfaces/busServiceInterface'
 
+const busServicesService = new BusServicesService()
+
 export const useBusServicesStore = defineStore('busServices', {
   state: () => ({ busServices: [] as IBusService[] }),
   actions: {
@@ -15,7 +17,7 @@ export const useBusServicesStore = defineStore('busServices', {
         arrival_point: arrivalPoint,
         departure_date: date
       }
-      this.busServices = await BusServicesService.getBusServices(q)
+      this.busServices = await busServicesService.getBusServices(q)
     }
   }
 })

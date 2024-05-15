@@ -13,6 +13,7 @@ const props = defineProps({
 })
 
 const citiesStore = useCitiesStore()
+const busServicesService = new BusServicesService()
 
 const departurePoints = ref([] as ICity[])
 const arrivalPoints = ref([] as ICity[])
@@ -29,16 +30,21 @@ const itemProps = (item: ICity) => {
   }
 }
 
+// Функция изменения автобусного рейса
 const editBusService = async () => {
+  // Проверка корректности введенных данных
   if (
-    selectedDeparturePoint.value?.value.title === selectedArrivalPoint.value?.value.title ||
-    departureDate.value === null || arrivalDate.value === null ||
+    selectedDeparturePoint.value?.value.title ===
+      selectedArrivalPoint.value?.value.title ||
+    departureDate.value === null ||
+    arrivalDate.value === null ||
     arrivalDate.value.getTime() < departureDate.value.getTime()
   ) {
     alert('Некоторые данные некорректны. Измените их и попробуйте еще раз')
     return
   }
 
+  // Формирования автобусного рейса
   const timezoneOffset = departureDate.value!.getTimezoneOffset() * 60000
   const editedBusService = {
     id: props.busService!.id,
@@ -56,24 +62,40 @@ const editBusService = async () => {
         region: '',
         country: ''
       },
-      departure_date: new Date(departureDate.value!.getTime() - timezoneOffset).toISOString(),
-      arrival_date: new Date(arrivalDate.value!.getTime() - timezoneOffset).toISOString()
+      departure_date: new Date(
+        departureDate.value!.getTime() - timezoneOffset
+      ).toISOString(),
+      arrival_date: new Date(
+        arrivalDate.value!.getTime() - timezoneOffset
+      ).toISOString()
     }
   }
-  Object.assign(editedBusService.value.departure_point, selectedDeparturePoint.value?.value)
-  Object.assign(editedBusService.value.arrival_point, selectedArrivalPoint.value?.value)
+  Object.assign(
+    editedBusService.value.departure_point,
+    selectedDeparturePoint.value?.value
+  )
+  Object.assign(
+    editedBusService.value.arrival_point,
+    selectedArrivalPoint.value?.value
+  )
 
-  await BusServicesService.updateBusService(editedBusService)
+  // Отправка в БД
+  await busServicesService.updateBusService(editedBusService)
   location.reload()
 }
 
+// Подгрузка городов и заполнение предыдущих данных рейса
 onMounted(async () => {
   await citiesStore.getCities()
   departurePoints.value = citiesStore.cities
   arrivalPoints.value = citiesStore.cities
 
-  selectedDeparturePoint.value = citiesStore.cities.find(city => city.id === props.busService?.value.departure_point._id)
-  selectedArrivalPoint.value = citiesStore.cities.find(city => city.id === props.busService?.value.arrival_point._id)
+  selectedDeparturePoint.value = citiesStore.cities.find(
+    (city) => city.id === props.busService?.value.departure_point._id
+  )
+  selectedArrivalPoint.value = citiesStore.cities.find(
+    (city) => city.id === props.busService?.value.arrival_point._id
+  )
 
   const bsDepartureDate = new Date(props.busService?.value.departure_date)
   const bsArrivalDate = new Date(props.busService?.value.arrival_date)
@@ -174,3 +196,4 @@ onMounted(async () => {
   margin-top: 1.5rem;
 }
 </style>
+

@@ -13,6 +13,7 @@ class BusServicesService {
   async getBusServices(q: IQuery): Promise<IBusService[]> {
     let departureDate = new Date()
 
+    // Если поисковые данные пустые, то возвращаем все автобусные рейсы
     if (
       q.departure_point === null &&
       q.arrival_point === null &&
@@ -26,11 +27,13 @@ class BusServicesService {
       if (q.departure_date) departureDate = new Date(q.departure_date)
     }
 
+    // Получаем все автобусные рейсы
     const response = await instance
       .get('_design/busservices/_view/all-busservices', {})
       .then((res) => res.data.rows)
       .catch((err) => console.log(err))
 
+    // Возвращаем только необходимые
     return response.filter((busService: IBusService) => {
       const comparedDate = new Date(busService.value.departure_date)
       const timezoneOffset = comparedDate.getTimezoneOffset() * 60000
@@ -92,4 +95,4 @@ class BusServicesService {
   }
 }
 
-export default new BusServicesService()
+export default BusServicesService

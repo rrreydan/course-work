@@ -4,6 +4,7 @@ import getInstance from './apiInstance'
 const instance = getInstance()
 
 class CitiesService {
+  // Метод получения массива городов из базы данных
   async getCities(): Promise<ICity[]> {
     return await instance
       .get('_design/cities/_view/all-cities', {})
@@ -12,4 +13,4 @@ class CitiesService {
   }
 }
 
-export default new CitiesService()
+export default CitiesService

@@ -5,6 +5,7 @@ import UsersService from '@/services/users.service'
 const localStorageUser = localStorage.getItem('user')
   ? JSON.parse(localStorage.getItem('user') as string)
   : null
+const usersService = new UsersService()
 
 export const useUsersStore = defineStore('users', {
   state: () => ({
@@ -15,15 +16,15 @@ export const useUsersStore = defineStore('users', {
   }),
   actions: {
     async getUsers() {
-      this.users = await UsersService.getUsers()
+      this.users = await usersService.getUsers()
     },
 
     async getUserById(id: string) {
-      return await UsersService.getUserById(id)
+      return await usersService.getUserById(id)
     },
 
     async registerUser(email: string, password: string) {
-      const response = await UsersService.addUser(email, password)
+      const response = await usersService.addUser(email, password)
       const user = await this.getUserById(response.id)
       this.loginUser(user)
     },
